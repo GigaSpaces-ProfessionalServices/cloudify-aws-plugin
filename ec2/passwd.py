@@ -17,6 +17,7 @@
 import base64
 import binascii
 
+from Crypto import Random
 from Crypto.PublicKey import RSA
 
 from cloudify.exceptions import NonRecoverableError
@@ -47,6 +48,7 @@ def _decrypt_password(rsa_key, password):
     encrypted_data = base64.b64decode(password)
     cipher_text = int(binascii.hexlify(encrypted_data), 16)
 
+    Random.atfork()
     plaintext = rsa_key.decrypt(cipher_text)
 
     decrypted_data = _long_to_bytes(plaintext)
